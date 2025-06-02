@@ -1,16 +1,28 @@
+import java.util.Arrays;
 
-import java.util.*;
+public class sort{
+    public static void main(String[] args){
+        int numList[] = {12,5,77,22,89,34,88,4,9,6,73,99};
+        selSort(numList);
 
-public class sort {
-    public static void  main (String []args){
-        int num[]= {3,6,2,10,8};
-        int min;
+        System.out.println(Arrays.toString(numList));
+    }
+    public static void selSort(int arr[]){
+        int arrLength = arr.length;
+        int minIndex;
 
-        System.out.print(Arrays.toString(num));
-
-        for(int i=0; i<num.length; i++ ){
-
+        for(int i=0; i < arrLength; i++){
+            minIndex = i;
+            for(int j = i +1;j<arrLength; j++){
+                if(arr[j] < arr[minIndex]){
+                    minIndex = j;
+                }
+            }
+            if(minIndex != i){
+                int temp = arr[i];
+                arr[i] = arr[minIndex];
+                arr[minIndex] = temp;
+            }
         }
-
     }
 }
