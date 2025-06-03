@@ -1,11 +1,11 @@
 import java.util.Arrays;
 public class bsorting {
     public static void main(String[] args){
-        int numlist[] = {1,99,789,56,22,3,77,6,5};
+        int numberList[] = {1,99,789,56,22,3,77,6,5};
 
-        bubbleSort(numlist);
+        bubbleSort(numberList);
 
-        String res = Arrays.toString(numlist);
+        String res = Arrays.toString(numberList);
         System.out.print(res);
 
 
