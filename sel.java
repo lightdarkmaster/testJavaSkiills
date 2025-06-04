@@ -4,9 +4,10 @@ import java.util.Arrays;
  class sel {
     public static void main(String[] args){
         int num[] = {1,88,66,44,33,22,45,67,88,1,4,9,2,9};
+        String result = "Result : ";
         selectionSort(num);
 
-        System.out.println("Res: " + Arrays.toString(num));
+        System.out.println(result + Arrays.toString(num));
     }
 
     public static void selectionSort(int arr[]){
