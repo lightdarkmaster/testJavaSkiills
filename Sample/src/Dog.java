@@ -4,4 +4,8 @@ public class Dog {
     private String address = "Leyte";
     protected int age = 2;
 
+    public String getAddress(){
+        return address;
+    }
+
 }
