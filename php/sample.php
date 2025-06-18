@@ -30,6 +30,12 @@ function areaOfTrapezoid($base1, $base2, $height){
     return $area = $initArea * $height;
 }
 
+function areaOfCircle($radius){
+    $pi = 3.14;
+    $radiusInitArea = $radius * $radius;
+    return $area = $pi * $radiusInitArea;
+}
+
 
 echo fib(9);
 
@@ -37,7 +43,8 @@ echo "\nArea of the square is : " . getAreaSquare(5) . " square meters";
 
 echo "\nArea of the Triangle is : " . areaOfTriangle(10,7) . " square meters";
 
-echo "\nArea of the Trapezoid is : " . areaOfTrapezoid(10,15,9) . " square meters"
+echo "\nArea of the Trapezoid is : " . areaOfTrapezoid(10,15,9) . " square meters";
 
+echo "\nArea of the Circle is : " . areaOfCircle(10) . " square meters";
 
 ?>
