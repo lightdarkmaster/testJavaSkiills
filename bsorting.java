@@ -1,29 +1,29 @@
 import java.util.Arrays;
-public class bsorting {
+
+class bsorting{
+
     public static void main(String[] args){
-        int numberList[] = {1,99,789,56,22,3,77,6,5};
+        int numlist[] = {1,66,323,88,2,87,22,456,7,3,9,23};
 
-        bubbleSort(numberList);
-
-        String res = Arrays.toString(numberList);
-        System.out.print(res);
-
-
+        bsort(numlist);
+        System.out.println(Arrays.toString(numlist));
     }
-    public static void bubbleSort(int arr[]){
-        int arrLength = arr.length;
+
+    public static void bsort(int arr[]){
+        int length = arr.length;
         boolean swapped;
 
-        for(int i=0; i < arrLength -1; i++){
+        for(int i=0; i < length; i++){
             swapped = false;
-            for(int j=0; j< arrLength -  i - 1; j++){
+            for(int j=0; j < length - i - 1; j++){
                 if(arr[j] > arr[j+1]){
                     int temp = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
                     swapped = true;
                 }
-            }if(!swapped){
+            }
+            if(!swapped){
                 break;
             }
         }
