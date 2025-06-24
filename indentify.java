@@ -12,7 +12,7 @@ public class indentify {
         if(num1%2 == 0){
             System.out.println("Even numbers");
         }else{
-            System.out.println("Odd nunbers");
+            System.out.println("Odd numbers");
         }
     }
 }
