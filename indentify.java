@@ -1,7 +1,7 @@
-//import necessary requirements..
 import java.util.Scanner;
 
 
+//identify class
 public class indentify {
     public static void main(String[] args){
         int num1;
