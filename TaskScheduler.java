@@ -1,99 +1,102 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Timer;
 
-public class TaskScheduler {
+public class TaskScheduler extends JFrame {
+    private JTextField taskField;
+    private JTextField dateTimeField;
+    private JTable taskTable;
+    private DefaultTableModel tableModel;
+    private java.util.List<ScheduledTask> scheduledTasks;
 
-    // Thread-safe map for task results
-    private static final ConcurrentMap<String, TaskResult> taskResults = new ConcurrentHashMap<>();
-    private static final ExecutorService executor = Executors.newFixedThreadPool(5);
+    public TaskScheduler() {
+        setTitle("Simple Java Scheduler");
+        setSize(600, 400);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("Task Scheduler Started");
+        scheduledTasks = new ArrayList<>();
 
-        // Define tasks
-        for (int i = 0; i < 10; i++) {
-            Task task = new Task("Task-" + i, () -> {
-                int rand = ThreadLocalRandom.current().nextInt(1, 10);
-                if (rand <= 3) throw new TaskExecutionException("Random failure.");
-                Thread.sleep(rand * 100L);
-                return "Completed after " + rand + " units.";
-            });
+        // Input Panel
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            executor.submit(() -> runWithRetry(task, 3));
-        }
+        taskField = new JTextField();
+        dateTimeField = new JTextField("yyyy-MM-dd HH:mm");
 
-        executor.shutdown();
-        executor.awaitTermination(10, TimeUnit.SECONDS);
-        generateReport();
+        inputPanel.add(new JLabel("Task:"));
+        inputPanel.add(taskField);
+        inputPanel.add(new JLabel("Date & Time:"));
+        inputPanel.add(dateTimeField);
 
-        System.out.println("All tasks completed. Report generated.");
+        JButton addButton = new JButton("Schedule Task");
+        inputPanel.add(addButton);
+
+        // Table
+        String[] columnNames = {"Task", "DateTime"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        taskTable = new JTable(tableModel);
+        JScrollPane tableScrollPane = new JScrollPane(taskTable);
+
+        // Layout
+        add(inputPanel, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+
+        // Add Button Action
+        addButton.addActionListener(e -> {
+            String taskText = taskField.getText();
+            String dateTimeText = dateTimeField.getText();
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(dateTimeText, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                scheduledTasks.add(new ScheduledTask(taskText, dateTime));
+                tableModel.addRow(new Object[]{taskText, dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))});
+                taskField.setText("");
+                dateTimeField.setText("yyyy-MM-dd HH:mm");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Invalid date/time format.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Scheduler Timer
+        new Timer(1000, e -> checkTasks()).start();
     }
 
-    // Retry logic for tasks
-    private static void runWithRetry(Task task, int maxRetries) {
-        int attempt = 0;
-        while (attempt < maxRetries) {
-            try {
-                attempt++;
-                String result = task.callable.call();
-                taskResults.put(task.id, new TaskResult(task.name, result, "Success", LocalDateTime.now()));
-                return;
-            } catch (Exception e) {
-                if (attempt == maxRetries) {
-                    taskResults.put(task.id, new TaskResult(task.name, e.getMessage(), "Failed", LocalDateTime.now()));
-                }
+    private void checkTasks() {
+        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
+        Iterator<ScheduledTask> iterator = scheduledTasks.iterator();
+        while (iterator.hasNext()) {
+            ScheduledTask task = iterator.next();
+            if (task.getDateTime().equals(now)) {
+                JOptionPane.showMessageDialog(this, "Scheduled Task: " + task.getTask(), "Task Reminder", JOptionPane.INFORMATION_MESSAGE);
+                iterator.remove(); // Remove task after alerting
             }
         }
     }
 
-    // Write taskResults to JSON
-    private static void generateReport() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("task_report.json")) {
-            gson.toJson(taskResults, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TaskScheduler().setVisible(true));
     }
 
-    // Inner classes
+    static class ScheduledTask {
+        private final String task;
+        private final LocalDateTime dateTime;
 
-    static class Task {
-        String id;
-        String name;
-        Callable<String> callable;
-
-        Task(String name, Callable<String> callable) {
-            this.id = UUID.randomUUID().toString();
-            this.name = name;
-            this.callable = callable;
+        public ScheduledTask(String task, LocalDateTime dateTime) {
+            this.task = task;
+            this.dateTime = dateTime;
         }
-    }
 
-    static class TaskResult {
-        String taskName;
-        String result;
-        String status;
-        LocalDateTime timestamp;
-
-        TaskResult(String taskName, String result, String status, LocalDateTime timestamp) {
-            this.taskName = taskName;
-            this.result = result;
-            this.status = status;
-            this.timestamp = timestamp;
+        public String getTask() {
+            return task;
         }
-    }
 
-    static class TaskExecutionException extends Exception {
-        TaskExecutionException(String message) {
-            super(message);
+        public LocalDateTime getDateTime() {
+            return dateTime;
         }
     }
 }
