@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Timer;
+import javax.swing.Timer;
 
 public class TaskScheduler extends JFrame {
     private JTextField taskField;
