@@ -133,7 +133,7 @@ public class TaskScheduler extends JFrame {
             }
         }
     }
-
+    //Main
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new TaskScheduler().setVisible(true));
     }
@@ -146,7 +146,7 @@ public class TaskScheduler extends JFrame {
             this.task = task;
             this.dateTime = dateTime;
         }
-
+        //get task
         public String getTask() {
             return task;
         }
