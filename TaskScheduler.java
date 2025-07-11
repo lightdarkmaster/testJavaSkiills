@@ -133,6 +133,18 @@ public class TaskScheduler extends JFrame {
             }
         }
     }
+
+    public void checkSchedule(){
+        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
+        Iterator<ScheduledTask> iterator = scheduledTasks.iterator();
+        while(iterator.hasNext()){
+            ScheduledTask task = iterator.next();
+            if(task.getDateTime().equals(now)){
+                JOptionPane.showMessageDialog(this, "Scheduled Task: " + task.getTask(), "Task Schedule", JOptionPane.INFORMATION_MESSAGE);
+                iterator.remove();
+            }
+        }
+    }
     //Main
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new TaskScheduler().setVisible(true));
