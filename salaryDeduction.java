@@ -22,7 +22,7 @@ public class salaryDeduction {
         String formattedNumber = format.format(excessInSalary);
         System.out.println("Final Remaining Salary: " +"Php." +  formattedNumber + ".00");
 
-        //Should be this:
+        //This is the correct answer for the overall cost and deductions.
         getFinalResult();
 
 
