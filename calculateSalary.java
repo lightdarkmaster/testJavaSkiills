@@ -3,33 +3,34 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class calculateSalary {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        int baseSalary;
+        double baseSalary;
 
-        System.out.println("Enter Base Salary: ");
+        System.out.print("Enter Base Salary: ");
         Scanner input = new Scanner(System.in);
-        baseSalary = input.nextInt();
+        baseSalary = input.nextDouble();
 
-        double baseSalaryMinusSSS = getSSSContribution(baseSalary);
-        getPhilHealthContribution(baseSalaryMinusSSS);
+        double salaryAfterSSS = getSSSContribution(baseSalary);
+        getPhilHealthContribution(salaryAfterSSS);
 
-
+        input.close();
     }
-    public static int getSSSContribution(double baseSalary){
+
+    public static double getSSSContribution(double baseSalary) {
         double sssContribution = baseSalary * 0.05;
         double minusSSSContribution = baseSalary - sssContribution;
 
-        NumberFormat format = NumberFormat.getNumberInstance(Locale.getDefault());
-        String sssReduction = format.format(minusSSSContribution);
-        System.out.println("Your salary minus SSS Contribution : " + "Php." + sssReduction + ".00");
-        return (int)sssContribution;
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("en", "PH"));
+        System.out.println("Your salary minus SSS Contribution: " + format.format(minusSSSContribution));
+        return minusSSSContribution;
     }
 
-    public static void getPhilHealthContribution(double baseSalaryMinusSSS){
-        double philHealthContribution = baseSalaryMinusSSS * 0.05;
-        double minusPhilHealthContribution = baseSalaryMinusSSS - philHealthContribution;
-        System.out.println("Your Salary After PhilHealth Contribution: " + "Php." + minusPhilHealthContribution);
-    }
+    public static void getPhilHealthContribution(double salaryAfterSSS) {
+        double philHealthContribution = salaryAfterSSS * 0.05;
+        double finalSalary = salaryAfterSSS - philHealthContribution;
 
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("en", "PH"));
+        System.out.println("Your salary after PhilHealth Contribution: " + format.format(finalSalary));
+    }
 }
