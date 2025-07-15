@@ -14,6 +14,8 @@ public class calculateSalary {
         double salaryAfterSSS = getSSSContribution(baseSalary);
         getPhilHealthContribution(salaryAfterSSS);
 
+
+        salaryPerHour();
         input.close();
     }
 
@@ -32,5 +34,10 @@ public class calculateSalary {
 
         NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("en", "PH"));
         System.out.println("Your salary after PhilHealth Contribution: " + format.format(finalSalary));
+    }
+    public static void salaryPerHour(){
+        int perDay = 620;
+        int perHour = perDay / 8;
+        System.out.println("Salary Per Hour: " + perHour);
     }
 }
