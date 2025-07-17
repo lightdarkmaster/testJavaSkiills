@@ -36,6 +36,7 @@ public class calculateSalary {
         System.out.println("Your salary after PhilHealth Contribution: " + format.format(finalSalary));
     }
     public static void salaryPerHour(){
+        //Computed Rate per day
         int perDay = 620;
         int perHour = perDay / 8;
         System.out.println("Salary Per Hour: " + perHour);
