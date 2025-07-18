@@ -38,7 +38,7 @@ public class calculateSalary {
     public static void salaryPerHour(){
         //Computed Rate per day
         int perDay = 620;
-        int perHour = perDay / 8;
+        int perHour = perDay / 8;//divide it by 8hrs to get the rate per hour..
         System.out.println("Salary Per Hour: " + perHour);
     }
 }
