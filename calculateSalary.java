@@ -5,7 +5,6 @@ import java.util.Locale;
 public class calculateSalary {
     public static void main(String[] args) {
 
-        //double as variable type just to make it accept decimal values
         double baseSalary;
 
         System.out.print("Enter Base Salary: ");
@@ -37,9 +36,8 @@ public class calculateSalary {
         System.out.println("Your salary after PhilHealth Contribution: " + format.format(finalSalary));
     }
     public static void salaryPerHour(){
-        //Computed Rate per day
         int perDay = 620;
-        int perHour = perDay / 8;//divide it by 8hrs to get the rate per hour..
+        int perHour = perDay / 8;
         System.out.println("Salary Per Hour: " + perHour);
     }
 }
