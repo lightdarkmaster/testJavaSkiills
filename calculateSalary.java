@@ -5,6 +5,7 @@ import java.util.Locale;
 public class calculateSalary {
     public static void main(String[] args) {
 
+        //double as variable type just to make it accept decimal values
         double baseSalary;
 
         System.out.print("Enter Base Salary: ");
