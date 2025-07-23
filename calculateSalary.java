@@ -89,41 +89,85 @@ public class calculateSalary {
 
         // Add container to frame
         frame.add(container);
-        frame.setVisible(true);
 
         // Currency formatter
         NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("en", "PH"));
+
+        // Initial contribution rates (modifiable)
+        final double[] sssRate = {0.05};
+        final double[] philHealthRate = {0.05};
 
         // Calculate action
         calculateButton.addActionListener(e -> {
             try {
                 double baseSalary = Double.parseDouble(salaryField.getText());
 
-                double sss = baseSalary * 0.05;
+                double sss = baseSalary * sssRate[0];
                 double afterSSS = baseSalary - sss;
 
-                double philHealth = afterSSS * 0.05;
+                double philHealth = afterSSS * philHealthRate[0];
                 double finalSalary = afterSSS - philHealth;
 
                 int perDay = 620;
                 int perHour = perDay / 8;
 
-                StringBuilder result = new StringBuilder();
-                result.append("=========== Salary Summary ===========\n");
-                result.append("Base Salary              : ").append(format.format(baseSalary)).append("\n");
-                result.append("SSS Contribution (5%)    : ").append(format.format(sss)).append("\n");
-                result.append("Salary after SSS         : ").append(format.format(afterSSS)).append("\n");
-                result.append("PhilHealth Contribution  : ").append(format.format(philHealth)).append("\n");
-                result.append("Final Take-Home Salary   : ").append(format.format(finalSalary)).append("\n");
-                result.append("Salary Per Hour (₱)      : ").append(perHour).append("\n");
-                result.append("Salary Per Day (₱)      : ").append(perDay).append("\n");
-                result.append("======================================");
+                String result = "=========== Salary Summary ===========\n" +
+                        "Base Salary              : " + format.format(baseSalary) + "\n" +
+                        "SSS Contribution (" + (int) (sssRate[0] * 100) + "%)    : " + format.format(sss) + "\n" +
+                        "Salary after SSS         : " + format.format(afterSSS) + "\n" +
+                        "PhilHealth Contribution (" + (int) (philHealthRate[0] * 100) + "%): " + format.format(philHealth) + "\n" +
+                        "Salary Per Hour (₱)      : " + perHour + "\n" +
+                        "Salary Per Day (₱)       : " + perDay + "\n" +
+                        "Final Take-Home Salary   : " + format.format(finalSalary) + "\n" +
+                        "======================================";
 
-                resultArea.setText(result.toString());
+                resultArea.setText(result);
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "❗ Please enter a valid number for the base salary.", "Input Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        // Create Menu Bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu optionsMenu = new JMenu("Options");
+        JMenuItem setRatesItem = new JMenuItem("Set Contribution Rates");
+
+        setRatesItem.addActionListener(event -> {
+            JTextField sssField = new JTextField(String.valueOf(sssRate[0] * 100));
+            JTextField philHealthField = new JTextField(String.valueOf(philHealthRate[0] * 100));
+
+            JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
+            panel.add(new JLabel("SSS Contribution (%)"));
+            panel.add(sssField);
+            panel.add(new JLabel("PhilHealth Contribution (%)"));
+            panel.add(philHealthField);
+
+            int result = JOptionPane.showConfirmDialog(frame, panel, "Set Contribution Rates",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    double newSSS = Double.parseDouble(sssField.getText()) / 100;
+                    double newPhil = Double.parseDouble(philHealthField.getText()) / 100;
+
+                    if (newSSS < 0 || newPhil < 0) throw new NumberFormatException();
+
+                    sssRate[0] = newSSS;
+                    philHealthRate[0] = newPhil;
+
+                    JOptionPane.showMessageDialog(frame, "Rates updated successfully!");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid percentage values.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        optionsMenu.add(setRatesItem);
+        menuBar.add(optionsMenu);
+        frame.setJMenuBar(menuBar);
+
+        // Final step: show window
+        frame.setVisible(true);
     }
 }
