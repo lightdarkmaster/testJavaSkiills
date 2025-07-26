@@ -28,7 +28,7 @@ public class calculateSalary {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Input panel
+        // Input panel here..
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBackground(Color.decode("#f4f4f4"));
