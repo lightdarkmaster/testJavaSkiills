@@ -111,6 +111,7 @@ public class calculateSalary {
                 int perDay = 620;
                 int perHour = perDay / 8;
 
+                //Here is the Display Sample..
                 String result = "=========== Salary Summary ===========\n" +
                         "Base Salary              : " + format.format(baseSalary) + "\n" +
                         "SSS Contribution (" + (int) (sssRate[0] * 100) + "%)    : " + format.format(sss) + "\n" +
