@@ -129,7 +129,7 @@ public class calculateSalary {
             }
         });
 
-        // Create Menu Bar
+        // Create Menu Bar for the options..
         JMenuBar menuBar = new JMenuBar();
         JMenu optionsMenu = new JMenu("Options");
         JMenuItem setRatesItem = new JMenuItem("Set Contribution Rates");
