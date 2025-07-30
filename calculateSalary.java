@@ -171,4 +171,15 @@ public class calculateSalary {
         // Final step: show window
         frame.setVisible(true);
     }
+
+    public static void getStatus(){
+        boolean online = false;
+        String status = "Active";
+
+        if(online){
+            System.out.println(status);
+        }else{
+            System.out.println("Not- Active");
+        }
+    }
 }
