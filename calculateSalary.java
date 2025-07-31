@@ -168,7 +168,7 @@ public class calculateSalary {
         menuBar.add(optionsMenu);
         frame.setJMenuBar(menuBar);
 
-        // Final step: show window
+        // Final step: show window for the frame to show.
         frame.setVisible(true);
     }
 
