@@ -178,6 +178,7 @@ public class calculateSalary {
 
         if(online){
             System.out.println(status);
+            System.out.println(status);
         }else{
             System.out.println("Not- Active");
         }
