@@ -164,6 +164,7 @@ public class calculateSalary {
             }
         });
 
+        //options menu
         optionsMenu.add(setRatesItem);
         menuBar.add(optionsMenu);
         frame.setJMenuBar(menuBar);
