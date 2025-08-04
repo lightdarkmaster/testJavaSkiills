@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+//odd or even
 public class detect {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
