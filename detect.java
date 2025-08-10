@@ -5,8 +5,8 @@ import java.util.Scanner;
  * determines whether the number is odd or even,
  * and continues until the user chooses to stop.
  *
- * Author: [Your Name]
- * Date: [Date]
+ * Author: Christian Barbosa
+ * Date: August 10, 2025
  */
 public class detect {
     public static void main(String[] args) {
