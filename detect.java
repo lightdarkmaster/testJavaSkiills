@@ -23,7 +23,7 @@ public class detect {
             number = sc.nextInt(); // Read an integer from the user
             sc.nextLine();         // Consume the leftover newline character
 
-            // Check if the number is even or odd using the modulus operator (%)
+            // Check if the number is even or odd using the modulus operator (%) modulus
             if (number % 2 == 0) {
                 System.out.println("Number is even");
             } else {
