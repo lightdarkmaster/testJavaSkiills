@@ -40,3 +40,4 @@ public class detect {
         sc.close();
     }
 }
+//end of the code
