@@ -164,6 +164,8 @@ public class calculateSalary {
             }
         });
 
+//        notes: this will assume that there are no deductions in your salary, you don't have late etc.
+
         //options menu
         optionsMenu.add(setRatesItem);
         menuBar.add(optionsMenu);
