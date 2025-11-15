@@ -20,10 +20,14 @@ class calc{
             product = num1 * num2;
             quotient = num1 / num2;
 
+            result = sum + difference + product + quotient;// Not Necessary..
+
             System.out.println("Sum: " + sum);
             System.out.println("Difference: " + difference);
             System.out.println("Product: " + product);
             System.out.println("Quotient: " + quotient);
+
+            System.out.print("Result: " + result);
 
             
         }catch(Exception e){
