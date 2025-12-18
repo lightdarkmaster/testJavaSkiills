@@ -6,10 +6,19 @@ public class ComplexMathSolver {
     public static void main(String[] args) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(4);
 
-        Future<double[][]> matrixResult = executor.submit(new MatrixMultiplicationTask());
-        Future<Double> polynomialResult = executor.submit(new PolynomialEvaluationTask(5)); // x = 5
-        Future<double[]> linearSystemResult = executor.submit(new LinearEquationSolverTask());
-        Future<Double> expressionResult = executor.submit(new ExpressionEvaluatorTask("3*x^2 + 2*x + 1", 5)); // x = 5
+        Future<double[][]> matrixResult = executor.submit(new MatrixMultiplicationTask(new double[][]{
+                {1, 2, 3, 4},
+                {5, 6, 7, 8},
+                {9, 10, 11, 12},
+                {13, 14, 15, 16}
+            }));
+        Future<Double> polynomialResult = executor.submit(new PolynomialEvaluationTask("3*x^3 + 2*x^2 + x + 1", 5));
+        Future<double[]> linearSystemResult = executor.submit(new LinearEquationSolverTask(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 10}
+            }, new double[]{8, 10, 12}));
+        Future<Double> expressionResult = executor.submit(new ExpressionEvaluatorTask("3*x^3 + 2*x^2 + x + 1", 5));
 
         System.out.println("Matrix Multiplication Result:");
         printMatrix(matrixResult.get());
@@ -22,59 +31,61 @@ public class ComplexMathSolver {
     }
 
     static class MatrixMultiplicationTask implements Callable<double[][]> {
+        private final double[][] A;
+        public MatrixMultiplicationTask(double[][] A) {
+            this.A = A;
+        }
+
         @Override
         public double[][] call() {
-            double[][] A = {
-                    {1, 2, 3},
-                    {4, 5, 6},
-                    {7, 8, 9}
-            };
-            double[][] B = {
-                    {9, 8, 7},
-                    {6, 5, 4},
-                    {3, 2, 1}
-            };
             int n = A.length;
-            double[][] C = new double[n][n];
+            double[][] B = new double[n][n];
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
                     for (int k = 0; k < n; k++)
-                        C[i][j] += A[i][k] * B[k][j];
-            return C;
+                        B[i][j] += A[i][k] * A[k][j];
+            return B;
         }
     }
 
     static class PolynomialEvaluationTask implements Callable<Double> {
+        private final String expr;
         private final double x;
-        public PolynomialEvaluationTask(double x) {
+        public PolynomialEvaluationTask(String expr, double x) {
+            this.expr = expr;
             this.x = x;
         }
 
         @Override
-        public Double call() {
-            // 3x^2 + 2x + 1
-            return 3 * x * x + 2 * x + 1;
+        public Double call() throws Exception {
+            return evaluateExpression(expr, x);
         }
     }
 
     static class LinearEquationSolverTask implements Callable<double[]> {
-        @Override
-        public double[] call() {
-            // Solving system: A*x = b
-            double[][] A = {
-                    {2, 3},
-                    {1, 2}
-            };
-            double[] b = {8, 5};
-            return solve2x2LinearSystem(A, b);
+        private final double[][] A;
+        private final double[] b;
+        public LinearEquationSolverTask(double[][] A, double[] b) {
+            this.A = A;
+            this.b = b;
         }
 
-        private double[] solve2x2LinearSystem(double[][] A, double[] b) {
-            double det = A[0][0]*A[1][1] - A[0][1]*A[1][0];
-            if (det == 0) throw new ArithmeticException("Matrix is singular");
-            double x = (b[0]*A[1][1] - b[1]*A[0][1]) / det;
-            double y = (A[0][0]*b[1] - A[1][0]*b[0]) / det;
-            return new double[]{x, y};
+        @Override
+        public double[] call() {
+            return solveLinearSystem(A, b);
+        }
+
+        private double[] solveLinearSystem(double[][] A, double[] b) {
+            int n = A.length;
+            double[] x = new double[n];
+            for (int i = 0; i < n; i++) {
+                x[i] = b[i];
+                for (int j = 0; j < i; j++) {
+                    x[i] -= A[i][j] * x[j];
+                }
+                x[i] /= A[i][i];
+            }
+            return x;
         }
     }
 
@@ -90,27 +101,19 @@ public class ComplexMathSolver {
         public Double call() throws Exception {
             return evaluateExpression(expr, x);
         }
-
-        private double evaluateExpression(String expr, double x) {
-            expr = expr.replaceAll("x", Double.toString(x))
-                    .replaceAll("\\^", "**"); // Replace ^ with ** for exponentiation
-            // Simplified parser using built-in JavaScript engine
-            try {
-                return (double) ((javax.script.ScriptEngineManager)
-                        new javax.script.ScriptEngineManager()
-                ).getEngineByName("JavaScript").eval(expr.replaceAll("\\*\\*", "^"));
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to evaluate expression: " + expr, e);
-            }
-        }
     }
 
-    static void printMatrix(double[][] matrix) {
-        for (double[] row : matrix) {
-            for (double val : row) {
-                System.out.printf("%8.2f", val);
-            }
-            System.out.println();
+    static double evaluateExpression(String expr, double x) {
+        expr = expr.replaceAll("x", Double.toString(x))
+                .replaceAll("\\^", "**"); // Replace ^ with ** for exponentiation
+        // Simplified parser using built-in JavaScript engine
+        try {
+            return (double) ((javax.script.ScriptEngineManager)
+                    new javax.script.ScriptEngineManager()
+                    ).getEngineByName("JavaScript").eval(expr.replaceAll("\\*\\*", "^"));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to evaluate expression: " + expr, e);
         }
     }
 }
+
