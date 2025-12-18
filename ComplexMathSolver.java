@@ -21,7 +21,7 @@ public class ComplexMathSolver {
         Future<Double> expressionResult = executor.submit(new ExpressionEvaluatorTask("3*x^3 + 2*x^2 + x + 1", 5));
 
         System.out.println("Matrix Multiplication Result:");
-        printMatrix(matrixResult.get());
+        System.out.print(matrixResult.get());
 
         System.out.println("\nPolynomial Result: " + polynomialResult.get());
         System.out.println("Linear Equation Result: " + Arrays.toString(linearSystemResult.get()));
